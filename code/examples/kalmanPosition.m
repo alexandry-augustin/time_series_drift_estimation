@@ -22,8 +22,7 @@ x = 0;     % initial state
 xhat = x;  % initial state estimate
 p_pos=Q;
 %------------------------------------------------------------------
-for k=1:N,
-
+for k=1:N
     %Model equation
     w=sqrt(Q)*randn; % process noise
     x=A*x+u+w;
@@ -37,28 +36,30 @@ for k=1:N,
 
     % Innovation
     Inn = y - x_prior;
-    
+
     %Covariance of Innovation
     p_prior = A*A*p_pos+Q;
-    
+
     %Gain matrix
     K = H*p_prior/(H*H*p_prior+R);
-    
+
     %State estimate
     xhat = A * x_prior + K * Inn;
-    
+
     %Covariance of prediction error
     p_pos=p_prior*(1-H*K);
-    
+
     %Save some parameters in vectors for plotting later
     X = [X; x];
     Xhat = [Xhat; xhat];
     Y = [Y; y];
 end
 %------------------------------------------------------------------
-plot((1:N),X,'k-.',
-     (1:N),Xhat,'k',
-     (1:N),Y,'k:');
+plot(
+  (1:N)', X,    'k-.',
+  (1:N)', Xhat, 'k',
+  (1:N)', Y,    'k:'
+);
 
 hLegend = legend('$x_k$','$\hat{x}_k$', '$y_k$');
 set(hLegend,'FontSize',14, 'interpreter', 'latex');
